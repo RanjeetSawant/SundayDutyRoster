@@ -1,0 +1,24 @@
+name: WhatsApp Sunday Notify
+
+on:
+  schedule:
+    # 08:00 IST every Sunday = 02:30 UTC
+    - cron: '30 2 * * 0'
+  workflow_dispatch: {} # lets you click "Run workflow" manually to test
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Send WhatsApp duty message
+        env:
+          GREENAPI_ID_INSTANCE: ${{ secrets.GREENAPI_ID_INSTANCE }}
+          GREENAPI_API_TOKEN: ${{ secrets.GREENAPI_API_TOKEN }}
+          GREENAPI_GROUP_CHAT_ID: ${{ secrets.GREENAPI_GROUP_CHAT_ID }}
+        run: npm run notify

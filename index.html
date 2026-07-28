@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chore Wheel — Weekly Room &amp; Toilet Duty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <p class="eyebrow">Sunday duty roster</p>
+    <h1>The Chore Wheel</h1>
+    <p class="subhead">Room and toilet cleaning rotate independently among 5 flatmates, every Sunday.</p>
+  </header>
+
+  <main>
+    <section class="duty-hero" id="duty-hero" aria-live="polite">
+      <!-- filled by app.js -->
+    </section>
+
+    <section class="wheel-section">
+      <h2>This week's rotation</h2>
+      <div class="wheel-wrap">
+        <svg id="wheel" viewBox="0 0 400 400" role="img" aria-label="Rotation wheel showing this week's assignees"></svg>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><i class="dot dot-room"></i> Room duty</span>
+        <span class="legend-item"><i class="dot dot-toilet"></i> Toilet duty</span>
+      </div>
+    </section>
+
+    <section class="schedule-section">
+      <h2>Next 6 weeks</h2>
+      <div class="table-wrap">
+        <table id="schedule-table">
+          <thead>
+            <tr>
+              <th>Week of</th>
+              <th>Room duty</th>
+              <th>Toilet duty</th>
+            </tr>
+          </thead>
+          <tbody><!-- filled by app.js --></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Names come from <code>config.json</code>. A GitHub Actions job posts this schedule to your WhatsApp group automatically every Sunday morning — see <code>README.md</code>.</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
