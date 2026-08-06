@@ -2,6 +2,6 @@
   "startSunday": "2026-08-08",
   "toiletStartSunday": "2026-08-08",
   "members": ["Ranjeet", "Sajal", "Mukesh", "Atharv", "Sarfraj"],
-  "roomOrder": ["Mukesh-Sir", "Atharv-Sir", "Sarfraj-Sir", "Ranjeet-Sir", "Sajal-Sir"],
+  "roomOrder": ["Sarfraj-Sir", "Ranjeet-Sir", "Sajal-Sir", "Mukesh-Sir", "Atharv-Sir"],
   "toiletOrder": ["Mukesh-Sir", "Sajal-Sir", "Ranjeet-Sir", "Sarfraj-Sir", "Atharv-Sir"]
 }
