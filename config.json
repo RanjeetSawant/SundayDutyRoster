@@ -1,7 +1,7 @@
 {
-  "startSunday": "2026-08-08",
-  "toiletStartSunday": "2026-08-08",
+  "startSunday": "2026-08-16",
+  "toiletStartSunday": "2026-08-16",
   "members": ["Ranjeet", "Sajal", "Mukesh", "Atharv", "Sarfraj"],
   "roomOrder": ["Sarfraj-Sir", "Ranjeet-Sir", "Sajal-Sir", "Mukesh-Sir", "Atharv-Sir"],
-  "toiletOrder": ["Mukesh-Sir", "Sajal-Sir", "Ranjeet-Sir", "Sarfraj-Sir", "Atharv-Sir"]
+  "toiletOrder": ["Sajal-Sir", "Ranjeet-Sir", "Sarfraj-Sir", "Atharv-Sir", "Mukesh-Sir"]
 }
