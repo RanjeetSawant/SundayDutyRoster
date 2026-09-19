@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chore Wheel — Weekly Room &amp; Toilet Duty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <p class="eyebrow">Sunday duty roster</p>
+    <h1>The Chore Wheel</h1>
+    <p class="subhead">Room and toilet cleaning rotate independently among 5 flatmates, every Sunday.</p>
+  </header>
+
+  <main>
+    <section class="duty-hero" id="duty-hero" aria-live="polite">
+      <!-- filled by app.js -->
+    </section>
+
+    <section class="wheel-section">
+      <h2>This week's rotation</h2>
+      <div class="wheel-wrap">
+        <svg id="wheel" viewBox="0 0 400 400" role="img" aria-label="Rotation wheel showing this week's assignees"></svg>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><i class="dot dot-room"></i> Room duty</span>
+        <span class="legend-item"><i class="dot dot-toilet"></i> Toilet duty</span>
+      </div>
+    </section>
+
+    <section class="schedule-section">
+      <h2>Next 6 weeks</h2>
+      <div class="table-wrap">
+        <table id="schedule-table">
+          <thead>
+            <tr>
+              <th>Week of</th>
+              <th>Room duty</th>
+              <th>Toilet duty</th>
+            </tr>
+          </thead>
+          <tbody><!-- filled by app.js --></tbody>
+        </table>
+      </div>
+    </section>
+
+    <details class="admin-panel" id="config-editor">
+      <summary>⚙️ Edit roster (names, order, dates)</summary>
+
+      <div class="admin-body">
+        <p class="admin-help">
+          Add, remove, or rename flatmates and reorder whose turn comes when. Saves
+          straight to <code>config.json</code> in the repo — the site and the Sunday
+          WhatsApp message both use it right away.
+        </p>
+
+        <h3 class="editor-subhead">Flatmates</h3>
+        <div id="members-list" class="member-list"><!-- filled by app.js --></div>
+        <button id="add-member" type="button" class="admin-secondary btn-small">+ Add flatmate</button>
+
+        <h3 class="editor-subhead">Room cleaning order <span class="editor-subhead-note">(every week)</span></h3>
+        <ol id="room-order-list" class="order-list"><!-- filled by app.js --></ol>
+
+        <h3 class="editor-subhead">Toilet cleaning order <span class="editor-subhead-note">(alternate weeks)</span></h3>
+        <ol id="toilet-order-list" class="order-list"><!-- filled by app.js --></ol>
+
+        <div class="admin-row">
+          <label for="cfg-start-sunday">Room rotation starts</label>
+          <input id="cfg-start-sunday" type="date">
+        </div>
+        <div class="admin-row">
+          <label for="cfg-toilet-start-sunday">Toilet rotation starts</label>
+          <input id="cfg-toilet-start-sunday" type="date">
+        </div>
+        <p class="admin-help admin-help-small">Both dates must be a Sunday — that's the reference point the rotation counts from.</p>
+
+        <div class="admin-row">
+          <label for="cfg-token">GitHub token</label>
+          <input id="cfg-token" type="password" placeholder="paste a fine-grained token (not saved)" autocomplete="off">
+        </div>
+        <p class="admin-help admin-help-small">
+          One-time setup: GitHub → Settings → Developer settings → Personal access
+          tokens → Fine-grained tokens → generate one scoped to just this repo with
+          <strong>Contents: Read and write</strong> permission. Paste it here each time —
+          it's used only to call the GitHub API directly from your browser and is
+          never stored.
+        </p>
+
+        <div class="admin-actions">
+          <button id="cfg-save" type="button">Save changes</button>
+          <button id="cfg-reload" type="button" class="admin-secondary">Reload from GitHub</button>
+        </div>
+
+        <p class="admin-status" id="cfg-status" role="status"></p>
+      </div>
+    </details>
+  </main>
+
+  <footer class="page-footer">
+    <p>Names come from <code>config.json</code>. A GitHub Actions job posts this schedule to your WhatsApp group automatically every Sunday morning — see <code>README.md</code>.</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
