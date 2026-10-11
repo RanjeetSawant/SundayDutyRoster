@@ -36,3 +36,90 @@ function buildMessage(config, week) {
   const dateStr = week.sundayUTC.toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+  const lines = [
+    `🧹 *Weekly cleaning duty — ${dateStr}*`,
+    ``,
+    `🚪 Room: *${week.room.name}*`,
+  ];
+  if (week.toilet.active) {
+    lines.push(`🚿 Toilet: *${week.toilet.name}*`);
+  }
+  lines.push(``, `Please finish by end of day. Thanks!`);
+  return lines.join('\n');
+}
+
+async function sendToWhatsApp(message) {
+  const { GREENAPI_ID_INSTANCE, GREENAPI_API_TOKEN, GREENAPI_GROUP_CHAT_ID, GREENAPI_API_URL } = process.env;
+
+  if (!GREENAPI_ID_INSTANCE || !GREENAPI_API_TOKEN || !GREENAPI_GROUP_CHAT_ID) {
+    throw new Error(
+      'Missing one of GREENAPI_ID_INSTANCE / GREENAPI_API_TOKEN / GREENAPI_GROUP_CHAT_ID env vars.'
+    );
+  }
+
+  // Prefer the instance's own dedicated host from the console (GREENAPI_API_URL).
+  // Falls back to the universal host if that secret isn't set.
+  const apiHost = (GREENAPI_API_URL || 'https://api.greenapi.com').replace(/\/$/, '');
+  const url = `${apiHost}/waInstance${GREENAPI_ID_INSTANCE}/sendMessage/${GREENAPI_API_TOKEN}`;
+
+  const res = await fetchWithTimeout(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chatId: GREENAPI_GROUP_CHAT_ID,
+      message,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Green API request failed (${res.status}) at ${apiHost}: ${body}`);
+  }
+
+  return res.json();
+}
+
+async function fetchWithTimeout(url, options, timeoutMs = 20000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error(`Request to ${url} timed out after ${timeoutMs}ms — check GREENAPI_API_URL is correct and the instance is authorized.`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function main() {
+  const config = loadConfig();
+  const overrides = loadOverrides();
+  const [thisWeek] = upcomingSchedule(config, 1, new Date(), overrides);
+  const message = buildMessage(config, thisWeek);
+
+  console.log('Sending message:\n' + message);
+
+  const attempts = 3;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const result = await sendToWhatsApp(message);
+      console.log('Green API response:', result);
+      return;
+    } catch (err) {
+      console.error(`Attempt ${attempt}/${attempts} failed: ${err.message}`);
+      if (attempt === attempts) throw err;
+      await new Promise((r) => setTimeout(r, 3000 * attempt));
+    }
+  }
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
