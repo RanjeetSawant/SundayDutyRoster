@@ -21,4 +21,5 @@ jobs:
           GREENAPI_ID_INSTANCE: ${{ secrets.GREENAPI_ID_INSTANCE }}
           GREENAPI_API_TOKEN: ${{ secrets.GREENAPI_API_TOKEN }}
           GREENAPI_GROUP_CHAT_ID: ${{ secrets.GREENAPI_GROUP_CHAT_ID }}
+          GREENAPI_API_URL: ${{ secrets.GREENAPI_API_URL }}
         run: npm run notify
